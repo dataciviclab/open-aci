@@ -51,8 +51,8 @@ service_account.json
 # =========================
 datasets/raw/
 **/*.parquet
-!registry/**
-!dashboard/**
+# registry può contenere artifact deliberati (raro) — i parquet runtime restano fuori
+!registry/*.json
 
 # =========================
 # LEGACY / SANDBOX
