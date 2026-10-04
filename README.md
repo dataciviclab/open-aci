@@ -11,7 +11,7 @@ open-ACI pulisce i dati pubblici dell'Automobile Club Italia (PRA) su prime iscr
 | **Fonte** | ACI — Automobile Club Italia (lod.aci.it / dati.gov.it), CC-BY 4.0 |
 | **Periodo** | 2017 — 2025 (LOD) · 2020–2021, 2024–2025 (Auto-Trend CSV) |
 | **Granularità** | Comune (solo enti territoriali di tipo Comune) |
-| **Dataset** | `aci_prime_iscrizioni_autovetture` · `aci_radiazioni_classe_euro` · `aci_autotrend_mensile` · `aci_parco_veicolare` |
+| **Dataset** | `aci_prime_iscrizioni_autovetture` · `aci_radiazioni_classe_euro` · `aci_autotrend_mensile` · `aci_parco_veicolare` · `aci_usato_proprieta` |
 | **Arricchimento** | Codice ISTAT, regione, popolazione (support ISTAT Lab) |
 
 ## Esempi di domande

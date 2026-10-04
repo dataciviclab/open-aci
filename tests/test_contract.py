@@ -38,6 +38,7 @@ EXPECTED_SLUGS = {
     "aci_radiazioni_classe_euro",
     "aci_autotrend_mensile",
     "aci_parco_veicolare",
+    "aci_usato_proprieta",
 }
 GCS_HARDCODED = re.compile(r"storage\.googleapis\.com/dataciviclab-clean/istat_elenco_comuni")
 
