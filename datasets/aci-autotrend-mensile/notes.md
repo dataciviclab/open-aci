@@ -1,21 +1,6 @@
 # aci_autotrend_mensile
 
-Auto-Trend ACI: mercato auto mensile per **ufficio PRA** (provincia).
-
-## Anni in scope (v0)
-
-| Anno | Formato ZIP | In pipeline |
-|---|---|---|
-| 2019 | ODS | no (toolkit clean: csv/xlsx/xls) |
-| 2020 | CSV | sì |
-| 2021 | CSV | sì |
-| 2022 | ODS | no |
-| 2023 | ODS | no |
-| 2024 | CSV | sì |
-| 2025 | CSV | sì |
-
-> Gap ODS: 2019/2022/2023 sono nello stesso open data ACI ma solo come `.ods`.
-> Toolkit non legge ODS (solo xlsx/xls). Da aprire come follow-up toolkit o conversione.
+Auto-Trend ACI: mercato auto mensile per **ufficio PRA** (provincia), 2019–2025.
 
 ## Fonte
 
@@ -23,9 +8,19 @@ Auto-Trend ACI: mercato auto mensile per **ufficio PRA** (provincia).
 - ZIP annuali, CC-BY 4.0
 - Canale istituzionale ACI (non lod.aci.it)
 
-## Contenuto
+## Formati nei ZIP
 
-File provinciale: `Prime, usato netto e rad.ni AV mese-pv YYYY.csv`
+| Anno | Formato file provinciale |
+|---|---|
+| 2019 | ODS |
+| 2020–2021 | CSV |
+| 2022–2023 | ODS |
+| 2024–2025 | CSV |
+
+Pulito con `include: Prime*AV*mese-pv*` (csv + ods).  
+Lettura ODS: toolkit clean `engine=odf` (branch `feat/clean-ods`, dipendenza `odfpy`).
+
+## Contenuto
 
 | Clean | Note |
 |---|---|
@@ -48,6 +43,5 @@ Frequenza **mensile** × granularità **provinciale** — complementa LOD comuna
 
 ## Out of scope v0
 
-- Categorie veicolo / minivolture (CSV secondari nello ZIP)
-- Anni ODS
+- Categorie veicolo / minivolture (file secondari nello ZIP)
 - PDF mensili editoriali

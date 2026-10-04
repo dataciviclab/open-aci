@@ -6,23 +6,28 @@ dataset:
   source_id: "aci"
   tags: [trasporti, aci, autotrend, mercato-auto, mensile, provincia, parco-auto]
   category: trasporti
-  description: "Auto-Trend ACI: prime iscrizioni, usato netto e radiazioni per mese e ufficio PRA (provincia). Anni CSV open-data: 2020-2021, 2024-2025. Fonte aci.gov.it."
-  years: [2020, 2021, 2024, 2025]
+  description: "Auto-Trend ACI: prime iscrizioni, usato netto e radiazioni per mese e ufficio PRA (provincia), 2019-2025. Fonte aci.gov.it open data (CSV + ODS)."
+  years: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
   time_coverage:
     mode: "full_series"
-    start_year: 2020
+    start_year: 2019
     end_year: 2025
-    # 2019/2022/2023 pubblicati solo come ODS: non supportati dal toolkit clean (xlsx/xls)
 
 raw:
   output_policy: overwrite
   extractor:
     type: "unzip_all"
   sources:
+    - name: "aci_autotrend_2019"
+      type: "http_file"
+      year: 2019
+      primary: true
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Autotrend_2019_OD.zip"
+        filename: "aci_autotrend_2019.zip"
     - name: "aci_autotrend_2020"
       type: "http_file"
       year: 2020
-      primary: true
       args:
         url: "https://aci.gov.it//app/uploads/2024/06/Autotrend_2020_OD.zip"
         filename: "aci_autotrend_2020.zip"
@@ -32,6 +37,18 @@ raw:
       args:
         url: "https://aci.gov.it//app/uploads/2024/06/Autotrend_2021_OD.zip"
         filename: "aci_autotrend_2021.zip"
+    - name: "aci_autotrend_2022"
+      type: "http_file"
+      year: 2022
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Autotrend_2022_OD.zip"
+        filename: "aci_autotrend_2022.zip"
+    - name: "aci_autotrend_2023"
+      type: "http_file"
+      year: 2023
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Autotrend_2023_OD.zip"
+        filename: "aci_autotrend_2023.zip"
     - name: "aci_autotrend_2024"
       type: "http_file"
       year: 2024
@@ -57,7 +74,7 @@ clean:
   read:
     source: config_only
     mode: explicit
-    include: ["Prime*AV*mese-pv*.csv"]
+    include: ["Prime*AV*mese-pv*"]
     header: true
     delim: ";"
     encoding: "utf-8"
@@ -78,19 +95,19 @@ mart:
   tables:
     - name: "mart_anno_formalita"
       sql: "sql/mart_anno_formalita.sql"
-      years: [2020, 2021, 2024, 2025]
+      years: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
       source_layer: clean
     - name: "mart_anno_mese_formalita"
       sql: "sql/mart_anno_mese_formalita.sql"
-      years: [2020, 2021, 2024, 2025]
+      years: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
       source_layer: clean
     - name: "mart_anno_provincia_formalita"
       sql: "sql/mart_anno_provincia_formalita.sql"
-      years: [2020, 2021, 2024, 2025]
+      years: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
       source_layer: clean
     - name: "mart_trend_mensile"
       sql: "sql/mart_trend_mensile.sql"
-      years: [2020, 2021, 2024, 2025]
+      years: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
       source_layer: clean
   required_tables:
     - mart_anno_formalita
