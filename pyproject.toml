@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dataciviclab-open-aci"
+version = "0.1.0"
+description = "Open ACI — parco auto italiano: prime iscrizioni e radiazioni"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+
+# duckdb: dipendenza runtime (usata dai test SQL e dal motore).
+# toolkit è CLI esterno → vive nell'extra `pipeline`.
+# lab-connectors arriva transitivamente da toolkit (non si dichiara).
+dependencies = [
+    "duckdb>=1.5.3,<2",
+]
+
+# Nessun package Python: il repo è dati + SQL + scripts.
+[tool.setuptools]
+packages = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.5",
+]
+pipeline = [
+    "dataciviclab-toolkit @ git+https://github.com/dataciviclab/toolkit.git",
+]
+dashboard = [
+    "streamlit>=1.61",
+    "plotly>=5.18",
+    "altair>=6.2",
+    "pandas>=3.0",
+    "duckdb>=1.5.3",
+    "lab-connectors[duckdb] @ git+https://github.com/dataciviclab/lab-connectors.git",
+]
+
+[project.urls]
+Home = "https://github.com/dataciviclab/open-aci"
+
+[tool.toolkit.extends]
+source_id = "aci"

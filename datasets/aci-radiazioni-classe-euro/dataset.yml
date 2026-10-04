@@ -1,0 +1,142 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "aci_radiazioni_classe_euro"
+  source_id: "aci"
+  tags: [trasporti, aci, radiazioni, demolizione, classe-euro, parco-auto]
+  category: trasporti
+  description: "Radiazioni per demolizione di autovetture per comune e classe euro (2017-2025). Fonte ACI via dati.gov.it / lod.aci.it."
+  years: [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+  time_coverage:
+    mode: "full_series"
+    start_year: 2017
+    end_year: 2025
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "aci_radiazioni_2017"
+      type: "http_file"
+      year: 2017
+      primary: true
+      args:
+        url: "http://lod.aci.it/sites/default/files/Radiazioni_per_demolizione_nel_2017-autovetture_per_ente_territoriale_e_classe_euro_2.csv"
+        filename: "aci_radiazioni_classe_euro_2017.csv"
+    - name: "aci_radiazioni_2018"
+      type: "http_file"
+      year: 2018
+      args:
+        url: "http://lod.aci.it/sites/default/files/Radiazioni_per_demolizione_nel_2018-autovetture_per_ente_territoriale_e_classe_euro_1.csv"
+        filename: "aci_radiazioni_classe_euro_2018.csv"
+    - name: "aci_radiazioni_2019"
+      type: "http_file"
+      year: 2019
+      args:
+        url: "http://lod.aci.it/sites/default/files/Radiazioni%20per%20demolizione%20nel%202019%20-%20autovetture%20per%20ente%20territoriale%20e%20classe%20euro.csv"
+        filename: "aci_radiazioni_classe_euro_2019.csv"
+    - name: "aci_radiazioni_2020"
+      type: "http_file"
+      year: 2020
+      args:
+        url: "http://lod.aci.it/sites/default/files/Radiazioni%20per%20demolizione%20nel%202020%20%E2%80%93%20autovetture%20per%20ente%20territoriale%20e%20classe%20euro.csv"
+        filename: "aci_radiazioni_classe_euro_2020.csv"
+    - name: "aci_radiazioni_2021"
+      type: "http_file"
+      year: 2021
+      args:
+        url: "http://lod.aci.it/sites/default/files/Radiazioni%20per%20demolizione%20nel%202021%20%E2%80%93%20autovetture%20per%20ente%20territoriale%20e%20classe%20euro.csv"
+        filename: "aci_radiazioni_classe_euro_2021.csv"
+    - name: "aci_radiazioni_2022"
+      type: "http_file"
+      year: 2022
+      args:
+        url: "http://lod.aci.it/sites/default/files/Radiazioni%20per%20demolizione%20nel%202022%20%E2%80%93%20autovetture%20per%20ente%20territoriale%20e%20classe%20euro.csv"
+        filename: "aci_radiazioni_classe_euro_2022.csv"
+    - name: "aci_radiazioni_2023"
+      type: "http_file"
+      year: 2023
+      args:
+        url: "http://lod.aci.it/sites/default/files/Radiazioni%20per%20demolizione%20nel%202023%20%E2%80%93%20autovetture%20per%20ente%20territoriale%20e%20classe%20euro.csv"
+        filename: "aci_radiazioni_classe_euro_2023.csv"
+    - name: "aci_radiazioni_2024"
+      type: "http_file"
+      year: 2024
+      args:
+        url: "http://lod.aci.it/sites/default/files/statistiche_radiazioni_2024.csv"
+        filename: "aci_radiazioni_classe_euro_2024.csv"
+    - name: "aci_radiazioni_2025"
+      type: "http_file"
+      year: 2025
+      args:
+        url: "http://lod.aci.it/sites/default/files/statistiche_radiazioni_2025.csv"
+        filename: "aci_radiazioni_classe_euro_2025.csv"
+
+clean:
+  sql: "sql/clean.sql"
+  required_columns:
+    - anno
+    - comune
+    - provincia
+    - codice_istat
+    - regione
+    - popolazione_residente
+    - classe_euro
+    - radiazioni
+  read:
+    source: config_only
+    mode: all
+    header: true
+    delim: ","
+    encoding: "utf-8"
+    trim_whitespace: true
+  validate:
+    not_null: [anno, comune, classe_euro, radiazioni]
+    min_rows: 1000
+    primary_key: [anno, comune, provincia, classe_euro]
+
+mart:
+  tables:
+    - name: "mart_anno_classe_euro"
+      sql: "sql/mart_anno_classe_euro.sql"
+      years: [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+      source_layer: clean
+    - name: "mart_regione_classe_euro"
+      sql: "sql/mart_regione_classe_euro.sql"
+      years: [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+      source_layer: clean
+    - name: "mart_quota_classe_euro"
+      sql: "sql/mart_quota_classe_euro.sql"
+      years: [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+      source_layer: clean
+  required_tables:
+    - mart_anno_classe_euro
+    - mart_regione_classe_euro
+    - mart_quota_classe_euro
+  validate:
+    table_rules:
+      mart_anno_classe_euro:
+        required_columns: [anno, classe_euro, radiazioni, n_comuni]
+        primary_key: [anno, classe_euro]
+        not_null: [anno, classe_euro, radiazioni]
+        min_rows: 5
+      mart_regione_classe_euro:
+        required_columns: [anno, regione, classe_euro, radiazioni]
+        primary_key: [anno, regione, classe_euro]
+        not_null: [anno, regione, classe_euro]
+        min_rows: 50
+      mart_quota_classe_euro:
+        required_columns: [anno, classe_euro, radiazioni, quota_totale]
+        primary_key: [anno, classe_euro]
+        not_null: [anno, classe_euro, radiazioni, quota_totale]
+        min_rows: 5
+
+validation:
+  fail_on_error: true
+
+support:
+  # Snapshot ISTAT fissa 2026 — URI senza {year} (altrimenti toolkit usa l'anno del run)
+  - name: "istat_comuni"
+    type: "external"
+    uri: "https://storage.googleapis.com/dataciviclab-clean/istat_elenco_comuni/2026/istat_elenco_comuni_2026_clean.parquet"
+    years: [2026]

@@ -1,0 +1,60 @@
+# OUTPUT DI RUN (NON VERSIONARE)
+out/*
+!out/.gitkeep
+
+# =========================
+# NOTEBOOK / PYTHON
+# =========================
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+.env
+.venv/
+venv/
+.coverage
+
+# =========================
+# TOOL / TEMP
+# =========================
+.tmp/
+_tmp/
+.cache/
+logs/
+*.log
+
+# =========================
+# IDE / EDITOR
+# =========================
+.vscode/
+.idea/
+*.code-workspace
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# CREDENTIALS (MAI)
+# =========================
+credentials.json
+service_account.json
+*.key
+*.pem
+
+# =========================
+# DATI RAW scaricati (non versionare)
+# =========================
+datasets/raw/
+**/*.parquet
+!registry/**
+!dashboard/**
+
+# =========================
+# LEGACY / SANDBOX
+# =========================
+_legacy/
