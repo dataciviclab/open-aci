@@ -1,0 +1,82 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "aci_parco_veicolare"
+  source_id: "aci"
+  tags: [trasporti, aci, autoritratto, parco-veicolare, alimentazione, stock, elettrica]
+  category: trasporti
+  description: "Autoritratto ACI — parco autovetture circolanti per alimentazione (stock al 31/12), 2024-2025. Fonte aci.gov.it open data."
+  years: [2024, 2025]
+  time_coverage:
+    mode: "full_series"
+    start_year: 2024
+    end_year: 2025
+    # 2019-2023: layout Excel non omogeneo (skip/header/sheet diversi) — backlog
+
+raw:
+  output_policy: overwrite
+  extractor:
+    type: "unzip_all"
+  sources:
+    - name: "aci_parco_2024"
+      type: "http_file"
+      year: 2024
+      primary: true
+      args:
+        url: "https://aci.gov.it//app/uploads/2025/06/Autoritratto-2024-Parco-Veicolare.zip"
+        filename: "aci_parco_2024.zip"
+    - name: "aci_parco_2025"
+      type: "http_file"
+      year: 2025
+      args:
+        url: "https://aci.gov.it//app/uploads/2026/06/Autoritratto2025_Parco_veicolare.zip"
+        filename: "aci_parco_2025.zip"
+
+clean:
+  sql: "sql/clean.sql"
+  required_columns:
+    - anno_riferimento
+    - alimentazione
+    - veicoli
+  read:
+    source: config_only
+    mode: explicit
+    include: ["Parco_veicolare_*.xlsx"]
+    sheet_name: "4 AV Alimentazione anno immat"
+    header: true
+    skip: 2
+    trim_whitespace: true
+  validate:
+    not_null: [anno_riferimento, alimentazione, veicoli]
+    min_rows: 5
+    primary_key: [anno_riferimento, alimentazione]
+
+mart:
+  tables:
+    - name: "mart_av_alimentazione"
+      sql: "sql/mart_av_alimentazione.sql"
+      years: [2024, 2025]
+      source_layer: clean
+    - name: "mart_quota_alimentazione"
+      sql: "sql/mart_quota_alimentazione.sql"
+      years: [2024, 2025]
+      source_layer: clean
+  required_tables:
+    - mart_av_alimentazione
+    - mart_quota_alimentazione
+  validate:
+    table_rules:
+      mart_av_alimentazione:
+        required_columns: [anno_riferimento, alimentazione, veicoli]
+        primary_key: [anno_riferimento, alimentazione]
+        not_null: [anno_riferimento, alimentazione, veicoli]
+        min_rows: 5
+      mart_quota_alimentazione:
+        required_columns: [anno_riferimento, alimentazione, veicoli, quota_totale]
+        primary_key: [anno_riferimento, alimentazione]
+        not_null: [anno_riferimento, alimentazione, veicoli, quota_totale]
+        min_rows: 5
+
+validation:
+  fail_on_error: true
