@@ -1,0 +1,124 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "aci_autotrend_mensile"
+  source_id: "aci"
+  tags: [trasporti, aci, autotrend, mercato-auto, mensile, provincia, parco-auto]
+  category: trasporti
+  description: "Auto-Trend ACI: prime iscrizioni, usato netto e radiazioni per mese e ufficio PRA (provincia). Anni CSV open-data: 2020-2021, 2024-2025. Fonte aci.gov.it."
+  years: [2020, 2021, 2024, 2025]
+  time_coverage:
+    mode: "full_series"
+    start_year: 2020
+    end_year: 2025
+    # 2019/2022/2023 pubblicati solo come ODS: non supportati dal toolkit clean (xlsx/xls)
+
+raw:
+  output_policy: overwrite
+  extractor:
+    type: "unzip_all"
+  sources:
+    - name: "aci_autotrend_2020"
+      type: "http_file"
+      year: 2020
+      primary: true
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Autotrend_2020_OD.zip"
+        filename: "aci_autotrend_2020.zip"
+    - name: "aci_autotrend_2021"
+      type: "http_file"
+      year: 2021
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Autotrend_2021_OD.zip"
+        filename: "aci_autotrend_2021.zip"
+    - name: "aci_autotrend_2024"
+      type: "http_file"
+      year: 2024
+      args:
+        url: "https://aci.gov.it//app/uploads/2025/02/AutoTrend-2024-OD.zip"
+        filename: "aci_autotrend_2024.zip"
+    - name: "aci_autotrend_2025"
+      type: "http_file"
+      year: 2025
+      args:
+        url: "https://aci.gov.it//app/uploads/2026/04/AutoTrend-2025-OD.zip"
+        filename: "aci_autotrend_2025.zip"
+
+clean:
+  sql: "sql/clean.sql"
+  required_columns:
+    - anno
+    - mese
+    - mese_num
+    - ufficio_pra
+    - formalita
+    - quantita
+  read:
+    source: config_only
+    mode: explicit
+    include: ["Prime*AV*mese-pv*.csv"]
+    header: true
+    delim: ";"
+    encoding: "utf-8"
+    trim_whitespace: true
+    # QUANTITA' usa punti migliaia italiani: forza VARCHAR e pulisci in SQL
+    columns:
+      "ANNO": "anno:INTEGER"
+      "MESE": "mese:VARCHAR"
+      "UFFICIO PRA DI COMPETENZA": "ufficio_pra:VARCHAR"
+      "FORMALITA'": "formalita:VARCHAR"
+      "QUANTITA'": "quantita:VARCHAR"
+  validate:
+    not_null: [anno, mese, ufficio_pra, formalita, quantita]
+    min_rows: 1000
+    primary_key: [anno, mese, ufficio_pra, formalita]
+
+mart:
+  tables:
+    - name: "mart_anno_formalita"
+      sql: "sql/mart_anno_formalita.sql"
+      years: [2020, 2021, 2024, 2025]
+      source_layer: clean
+    - name: "mart_anno_mese_formalita"
+      sql: "sql/mart_anno_mese_formalita.sql"
+      years: [2020, 2021, 2024, 2025]
+      source_layer: clean
+    - name: "mart_anno_provincia_formalita"
+      sql: "sql/mart_anno_provincia_formalita.sql"
+      years: [2020, 2021, 2024, 2025]
+      source_layer: clean
+    - name: "mart_trend_mensile"
+      sql: "sql/mart_trend_mensile.sql"
+      years: [2020, 2021, 2024, 2025]
+      source_layer: clean
+  required_tables:
+    - mart_anno_formalita
+    - mart_anno_mese_formalita
+    - mart_anno_provincia_formalita
+    - mart_trend_mensile
+  validate:
+    table_rules:
+      mart_anno_formalita:
+        required_columns: [anno, formalita, quantita]
+        primary_key: [anno, formalita]
+        not_null: [anno, formalita, quantita]
+        min_rows: 10
+      mart_anno_mese_formalita:
+        required_columns: [anno, mese, formalita, quantita]
+        primary_key: [anno, mese, formalita]
+        not_null: [anno, mese, formalita]
+        min_rows: 50
+      mart_anno_provincia_formalita:
+        required_columns: [anno, ufficio_pra, formalita, quantita]
+        primary_key: [anno, ufficio_pra, formalita]
+        not_null: [anno, ufficio_pra, formalita]
+        min_rows: 500
+      mart_trend_mensile:
+        required_columns: [anno, mese_num, formalita, quantita]
+        primary_key: [anno, mese_num, formalita]
+        not_null: [anno, mese_num, formalita]
+        min_rows: 50
+
+validation:
+  fail_on_error: true

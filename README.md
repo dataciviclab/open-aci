@@ -9,9 +9,9 @@ open-ACI pulisce i dati pubblici dell'Automobile Club Italia (PRA) su prime iscr
 | | |
 |---|---|
 | **Fonte** | ACI — Automobile Club Italia (lod.aci.it / dati.gov.it), CC-BY 4.0 |
-| **Periodo** | 2017 — 2025 |
+| **Periodo** | 2017 — 2025 (LOD) · 2020–2021, 2024–2025 (Auto-Trend CSV) |
 | **Granularità** | Comune (solo enti territoriali di tipo Comune) |
-| **Dataset** | `aci_prime_iscrizioni_autovetture` · `aci_radiazioni_classe_euro` |
+| **Dataset** | `aci_prime_iscrizioni_autovetture` · `aci_radiazioni_classe_euro` · `aci_autotrend_mensile` |
 | **Arricchimento** | Codice ISTAT, regione, popolazione (support ISTAT Lab) |
 
 ## Esempi di domande
@@ -19,6 +19,7 @@ open-ACI pulisce i dati pubblici dell'Automobile Club Italia (PRA) su prime iscr
 - **Quante auto elettriche si immatricolano nel mio comune?** E quante ibride?
 - **Come cambia la quota di elettrico tra regioni?**
 - **Quante auto vengono demolite, e di quale classe euro?**
+- **Come gira il mercato auto mese per mese in provincia?** (Auto-Trend)
 - **Il rinnovo del parco è omogeneo sul territorio?**
 
 ## Struttura del repo
@@ -43,9 +44,9 @@ make clean    # rimuove out/
 make test     # contract test
 ```
 
-Raw: `http_file` da lod.aci.it, una source per anno (`year:` filter toolkit).
-Clean: macro standard + join ISTAT via support external `{support.istat_comuni.path}`.
-Mart: aggregazioni nazionali/regionali multi-anno (`mart.tables[].years`).
+Raw: `http_file` da lod.aci.it (LOD) e aci.gov.it (Auto-Trend ZIP).
+Clean: macro standard; ISTAT via support external `{support.istat_comuni.path}`.
+Mart: aggregazioni multi-anno (`mart.tables[].years`). Auto-Trend include anni solo-CSV (ODS fuori scope toolkit).
 
 ## Accesso ai dati
 

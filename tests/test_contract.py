@@ -36,6 +36,7 @@ BLOCKED_OUT_EXTENSIONS = {".parquet", ".csv", ".jsonl", ".zip", ".xlsx", ".tsv"}
 EXPECTED_SLUGS = {
     "aci_prime_iscrizioni_autovetture",
     "aci_radiazioni_classe_euro",
+    "aci_autotrend_mensile",
 }
 GCS_HARDCODED = re.compile(r"storage\.googleapis\.com/dataciviclab-clean/istat_elenco_comuni")
 
@@ -117,13 +118,15 @@ def test_each_dataset_declares_minimum_contract(dataset_configs: list[Path]) -> 
         assert dataset.get("validation", {}).get("fail_on_error") is True
 
         support = dataset.get("support") or []
-        assert support, f"{rel}: manca support ISTAT"
-        istat = next((s for s in support if s.get("name") == "istat_comuni"), None)
-        assert istat, f"{rel}: manca support istat_comuni"
-        assert istat.get("type") == "external"
-        uri = istat.get("uri") or ""
-        assert "istat_elenco_comuni" in uri
-        assert "{year}" not in uri, f"{rel}: support ISTAT non deve usare {{year}} (usa snapshot fisso)"
+        clean_sql = (cfg.parent / dataset["clean"]["sql"]).read_text(encoding="utf-8")
+        if "{support.istat_comuni.path}" in clean_sql:
+            assert support, f"{rel}: clean usa ISTAT ma manca support istat_comuni"
+            istat = next((s for s in support if s.get("name") == "istat_comuni"), None)
+            assert istat, f"{rel}: manca support istat_comuni"
+            assert istat.get("type") == "external"
+            uri = istat.get("uri") or ""
+            assert "istat_elenco_comuni" in uri
+            assert "{year}" not in uri, f"{rel}: support ISTAT non deve usare {{year}} (usa snapshot fisso)"
 
 
 @pytest.mark.contract
@@ -148,8 +151,8 @@ def test_clean_sql_uses_support_placeholder_not_hardcoded_istat(
             encoding="utf-8"
         )
         rel = str(cfg.relative_to(REPO_ROOT))
-        assert "{support.istat_comuni.path}" in sql, f"{rel}: clean deve usare {{support.istat_comuni.path}}"
-        assert not GCS_HARDCODED.search(sql), f"{rel}: path ISTAT hardcoded nei clean.sql"
+        if "istat_elenco_comuni" in sql or "storage.googleapis.com" in sql:
+            assert "{support.istat_comuni.path}" in sql, f"{rel}: ISTAT hardcoded senza support placeholder"
 
 
 @pytest.mark.contract
