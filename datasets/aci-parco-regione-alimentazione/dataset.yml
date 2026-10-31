@@ -1,0 +1,92 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "aci_parco_regione_alimentazione"
+  source_id: "aci"
+  tags: [trasporti, aci, parco-veicolare, alimentazione, regioni, elettrico, ibrido, annuario, nuts2]
+  category: trasporti
+  description: "Parco autovetture per regione, alimentazione e classe di cilindrata (stock al 31/12), 2021-2023. Fonte ACI Annuario statistico, open data (ODS). ATTENZIONE: veicoli registrati al domicilio dell'intestatario, non circolanti sul territorio."
+  years: [2021, 2022, 2023]
+  time_coverage:
+    mode: "full_series"
+    start_year: 2021
+    end_year: 2023
+
+raw:
+  output_policy: overwrite
+  extractor:
+    type: "unzip_all"
+  sources:
+    # Nota: ACI cambia il pattern del nome file tra le edizioni (-OD / _OD).
+    # Le edizioni 2020 e 2021 hanno un layout diverso (senza colonna Alimentazione):
+    # backlog, non incluse in questo ciclo.
+    - name: "annuario_2022"
+      type: "http_file"
+      year: 2021
+      primary: true
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Annuario_Statistico-2022-OD.zip"
+        filename: "annuario_2022.zip"
+    - name: "annuario_2023"
+      type: "http_file"
+      year: 2022
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Annuario_Statistico-2023-OD.zip"
+        filename: "annuario_2023.zip"
+    - name: "annuario_2024"
+      type: "http_file"
+      year: 2023
+      args:
+        url: "https://aci.gov.it//app/uploads/2024/06/Annuario_Statistico-2024_OD.zip"
+        filename: "annuario_2024.zip"
+
+clean:
+  sql: "sql/clean.sql"
+  required_columns:
+    - anno
+    - regione
+    - alimentazione
+    - classe_cilindrata
+    - veicoli
+  read:
+    source: config_only
+    mode: explicit
+    include: ["Capitolo 3*.ods"]
+    sheet_name: "TABIII16"
+    header: true
+    skip: 2
+    trim_whitespace: true
+  validate:
+    not_null: [anno, regione, alimentazione, classe_cilindrata]
+    min_rows: 500
+    primary_key: [anno, regione, alimentazione, classe_cilindrata]
+
+mart:
+  tables:
+    - name: "mart_regione_alimentazione"
+      sql: "sql/mart_regione_alimentazione.sql"
+    - name: "mart_italia_alimentazione"
+      sql: "sql/mart_italia_alimentazione.sql"
+  required_tables:
+    - "mart_regione_alimentazione"
+    - "mart_italia_alimentazione"
+  validate:
+    table_rules:
+      mart_regione_alimentazione:
+        required_columns: [anno, regione, alimentazione, veicoli, quota_pct]
+        primary_key: [anno, regione, alimentazione]
+        min_rows: 150
+      mart_italia_alimentazione:
+        required_columns: [anno, alimentazione, veicoli, quota_pct]
+        primary_key: [anno, alimentazione]
+        min_rows: 8
+
+validation:
+  fail_on_error: true
+
+registry:
+  theme: "Parco autovetture per alimentazione e regione"
+  nuts_level: 2
+  dimensions: ["regione", "alimentazione", "classe_cilindrata"]
+  description: "ACI Annuario statistico — Tab.III.16, stock al 31/12 per regione, alimentazione e cilindrata"
