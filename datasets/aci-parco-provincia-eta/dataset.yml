@@ -1,0 +1,72 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "aci_parco_provincia_eta"
+  source_id: "aci"
+  tags: [trasporti, aci, parco-veicolare, provincia, eta-veicoli, rinnovo, anzianita]
+  category: trasporti
+  description: "Autovetture per provincia e classe di anno di immatricolazione (stock al 31/12/2025). Fonte ACI Autoritratto. Misura l'anzianità reale del parco, complementare alle classi Euro. Edizione 2024 esclusa: classi di anzianità diverse, serie non confrontabile."
+  # Solo 2025: l'edizione 2024 usa classi di anzianità DIVERSE (fino al 2008,
+  # 2009-2011, 2012-2014, 2015-2016, ...). Le due serie non sono confrontabili
+  # per classe senza una normalizzazione: backlog, non si finge che lo siano.
+  years: [2025]
+  time_coverage:
+    mode: "single_year"
+    start_year: 2025
+    end_year: 2025
+
+raw:
+  output_policy: overwrite
+  extractor:
+    type: "unzip_all"
+  sources:
+    - name: "autoritratto_2025"
+      type: "http_file"
+      year: 2025
+      args:
+        url: "https://aci.gov.it//app/uploads/2026/06/Autoritratto2025_Parco_veicolare.zip"
+        filename: "aci_parco_eta_2025.zip"
+
+clean:
+  sql: "sql/clean.sql"
+  required_columns:
+    - anno
+    - regione
+    - provincia
+    - classe_eta
+    - autovetture
+  read:
+    source: config_only
+    mode: explicit
+    include: ["Parco_veicolare_*.xlsx"]
+    sheet_name: "28 AV Provincia anno"
+    header: true
+    skip: 2
+    trim_whitespace: true
+  validate:
+    not_null: [anno, regione, provincia, classe_eta]
+    min_rows: 600
+    primary_key: [anno, regione, provincia, classe_eta]
+
+mart:
+  tables:
+    - name: "mart_provincia_eta"
+      sql: "sql/mart_provincia_eta.sql"
+  required_tables:
+    - "mart_provincia_eta"
+  validate:
+    table_rules:
+      mart_provincia_eta:
+        required_columns: [anno, regione, provincia, classe_eta, autovetture, quota_pct]
+        min_rows: 600
+        primary_key: [anno, regione, provincia, classe_eta]
+
+validation:
+  fail_on_error: true
+
+registry:
+  theme: "Età del parco autovetture per provincia"
+  nuts_level: 3
+  dimensions: ["provincia", "classe_eta"]
+  description: "ACI Autoritratto — foglio 28, autovetture per classe di anno di immatricolazione"
