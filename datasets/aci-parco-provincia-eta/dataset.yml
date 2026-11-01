@@ -24,6 +24,7 @@ raw:
     - name: "autoritratto_2025"
       type: "http_file"
       year: 2025
+      primary: true
       args:
         url: "https://aci.gov.it//app/uploads/2026/06/Autoritratto2025_Parco_veicolare.zip"
         filename: "aci_parco_eta_2025.zip"
