@@ -92,9 +92,8 @@ SELECT
     c.classe_euro,
     CAST(c.autovetture_num AS BIGINT) AS autovetture
 FROM cat c
-LEFT JOIN istat i
-    ON lower(trim(i.regione)) = lower(trim(c.regione))
-   AND lower(trim(i.provincia)) = lower(trim(c.provincia))
+LEFT JOIN istat i  -- comune + provincia, come gli altri dataset del repo
+    ON lower(trim(i.provincia)) = lower(trim(c.provincia))
    AND i.nome_k = lower(c.comune)
 LEFT JOIN univoci u
     ON u.nome_k = lower(c.comune)

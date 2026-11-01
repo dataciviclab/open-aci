@@ -98,9 +98,12 @@ match AS (
              WHEN u.codice_istat IS NOT NULL THEN 'nome_univoco'
              ELSE 'non_risolto' END AS join_qualita
     FROM cat c
+    -- Join su comune + provincia, come gli altri dataset del repo: la regione
+    -- non entra nel predicato perché ACI la scrive con gli spazi ("EMILIA
+    -- ROMAGNA") e ISTAT con i trattini ("Emilia-Romagna"), quindi aggiungerla
+    -- sposta ~600 comuni sul fallback per nome senza guadagnare copertura.
     LEFT JOIN istat i
-        ON lower(trim(i.regione)) = lower(trim(c.regione))
-       AND lower(trim(i.provincia)) = lower(trim(c.provincia))
+        ON lower(trim(i.provincia)) = lower(trim(c.provincia))
        AND i.nome_k = lower(c.comune)
     LEFT JOIN univoci u
         ON u.nome_k = lower(c.comune)
