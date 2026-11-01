@@ -6,7 +6,7 @@
 
 **Quante auto nuove elettriche vengono immatricolate nel tuo comune? E quante vecchie escono dal parco — e quante cambiano proprietario?**
 
-open-ACI raccoglie i dati pubblici dell’Automobile Club Italia sul parco veicolare e li rende leggibili: flussi comunali, mercato mensile provinciale, stock per alimentazione e passaggi di proprietà (usato).
+open-ACI raccoglie i dati pubblici dell’Automobile Club Italia sul parco veicolare e li rende leggibili: flussi comunali, mercato mensile provinciale, stock per alimentazione, categoria, classe Euro, anzianità e natura del proprietario, passaggi di proprietà (usato).
 
 ## Perché questi dati
 
@@ -18,9 +18,9 @@ Il PRA è la fonte primaria del parco auto italiano. ACI la pubblica in open dat
 |---|---|
 | **Fonte** | ACI — Automobile Club Italia · [lod.aci.it](http://lod.aci.it/) · [aci.gov.it](https://aci.gov.it/attivita-e-progetti/studi-e-ricerche/open-data/) |
 | **Licenza** | CC-BY 4.0 (dati) · MIT (codice di questo repo) |
-| **Dataset** | 5 serie |
-| **Periodo** | 2017–2025 (comunale LOD) · 2019–2025 (mensile provinciale) · 2024–2025 (stock / usato) |
-| **Granularità** | Comune · Provincia (ufficio PRA) · Nazionale |
+| **Dataset** | 10 serie |
+| **Periodo** | 2017–2025 (comunale LOD) · 2019–2025 (mensile provinciale) · 2021–2023 (stock regionale) · 2024–2025 (stock comunale e provinciale) |
+| **Granularità** | Comune · Provincia · Regione · Nazionale |
 
 | Dataset | Cosa misura | Anni | Granularità |
 |---|---|---|---|
@@ -29,8 +29,19 @@ Il PRA è la fonte primaria del parco auto italiano. ACI la pubblica in open dat
 | `aci_autotrend_mensile` | Prime iscrizioni, usato netto, radiazioni | 2019–2025 | Provincia × mese |
 | `aci_parco_veicolare` | Stock autovetture per alimentazione (31/12) | 2024–2025 | Nazionale |
 | `aci_usato_proprieta` | Passaggi di proprietà e minivolture | 2024–2025 | Nazionale × categoria |
+| `aci_parco_comune` | Stock per categoria veicolo, con auto per 1000 abitanti | 2024–2025 | Comune |
+| `aci_parco_comune_classe_euro` | Stock autovetture per classe ambientale Euro | 2024–2025 | Comune |
+| `aci_parco_regione_alimentazione` | Stock per alimentazione e cilindrata | 2021–2023 | Regione |
+| `aci_parco_provincia_soggetto` | Stock per natura del proprietario (famiglie/imprese) | 2024–2025 | Provincia |
+| `aci_parco_provincia_eta` | Stock per anno di immatricolazione | 2025 | Provincia |
 
 I dataset comunali sono arricchiti con codice ISTAT, regione e popolazione.
+
+> **Nota sui limiti**: questi dati sono *veicoli registrati al domicilio dell'intestatario*,
+> non veicoli circolanti nel territorio. Dove hanno sede società di noleggio o leasing il
+> rapporto per abitante è gonfiato (Trento 1.532 auto/1000 abitanti nel dato grezzo, 632
+> contando le sole persone fisiche). Per questo `aci_parco_provincia_soggetto` pubblica le
+> due letture affiancate.
 
 ## Esempi di domande
 
