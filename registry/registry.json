@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "open-aci",
   "source_repo": "dataciviclab/open-aci",
-  "updated_at": "2026-10-04",
+  "updated_at": "2026-11-01",
   "datasets": [
     {
       "slug": "aci_autotrend_mensile",
@@ -516,7 +516,7 @@
       "detail": "anni 2019-2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261004T164545Z_322f210c",
+        "run_id": "20261101T125521Z_18a7111f",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -530,9 +530,9 @@
           "raw": 225216,
           "clean": 13450
         },
-        "started_at": "2026-10-04T16:45:45.659612+00:00",
-        "finished_at": "2026-10-04T16:45:46.938120+00:00",
-        "duration_seconds": 1.279
+        "started_at": "2026-11-01T12:55:21.907428+00:00",
+        "finished_at": "2026-11-01T12:55:22.862889+00:00",
+        "duration_seconds": 0.955
       }
     },
     {
@@ -543,7 +543,7 @@
       "detail": "anni 2024-2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261004T164557Z_ebb20d5a",
+        "run_id": "20261101T125536Z_d6256634",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -557,9 +557,9 @@
           "raw": 8380097,
           "clean": 788
         },
-        "started_at": "2026-10-04T16:45:57.574158+00:00",
-        "finished_at": "2026-10-04T16:46:05.618895+00:00",
-        "duration_seconds": 8.045
+        "started_at": "2026-11-01T12:55:36.452817+00:00",
+        "finished_at": "2026-11-01T12:55:47.254658+00:00",
+        "duration_seconds": 10.802
       }
     },
     {
@@ -570,7 +570,7 @@
       "detail": "anni 2017-2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261004T164654Z_30bc7d0f",
+        "run_id": "20261101T125647Z_8376697b",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -585,9 +585,9 @@
           "raw": 1820369,
           "clean": 267169
         },
-        "started_at": "2026-10-04T16:46:54.357062+00:00",
-        "finished_at": "2026-10-04T16:46:58.051579+00:00",
-        "duration_seconds": 3.695
+        "started_at": "2026-11-01T12:56:47.528924+00:00",
+        "finished_at": "2026-11-01T12:56:52.890349+00:00",
+        "duration_seconds": 5.361
       }
     },
     {
@@ -598,7 +598,7 @@
       "detail": "anni 2017-2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261004T164744Z_bf7301b6",
+        "run_id": "20261101T125751Z_82df12fe",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -613,9 +613,9 @@
           "raw": 1718003,
           "clean": 334493
         },
-        "started_at": "2026-10-04T16:47:44.554741+00:00",
-        "finished_at": "2026-10-04T16:47:48.054741+00:00",
-        "duration_seconds": 3.5
+        "started_at": "2026-11-01T12:57:51.624592+00:00",
+        "finished_at": "2026-11-01T12:57:56.457968+00:00",
+        "duration_seconds": 4.833
       }
     },
     {
@@ -626,7 +626,7 @@
       "detail": "anni 2024-2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261004T164752Z_0b9d27a7",
+        "run_id": "20261101T125802Z_b7fbeb4f",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -640,9 +640,9 @@
           "raw": 970526,
           "clean": 1204
         },
-        "started_at": "2026-10-04T16:47:52.133324+00:00",
-        "finished_at": "2026-10-04T16:47:54.399363+00:00",
-        "duration_seconds": 2.266
+        "started_at": "2026-11-01T12:58:02.729447+00:00",
+        "finished_at": "2026-11-01T12:58:05.154319+00:00",
+        "duration_seconds": 2.425
       }
     }
   ],
