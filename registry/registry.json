@@ -1,19 +1,18 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "repo": "open-aci",
   "source_repo": "dataciviclab/open-aci",
-  "updated_at": "2026-11-01",
+  "updated_at": "2026-11-24",
+  "gcs": {
+    "clean": "year",
+    "prefix": "open-aci/"
+  },
   "datasets": [
     {
       "slug": "aci_autotrend_mensile",
       "name": "Aci Autotrend Mensile",
       "description": "Auto-Trend ACI: prime iscrizioni, usato netto e radiazioni per mese e ufficio PRA (provincia), 2019-2025. Fonte aci.gov.it open data (CSV + ODS).",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2019,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -24,69 +23,70 @@
         "parco-auto"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2019,
+        "end": 2025
+      },
+      "partitions": {
+        "2019": 3852,
+        "2020": 3852,
+        "2021": 3852,
+        "2022": 3852,
+        "2023": 3852,
+        "2024": 3852,
+        "2025": 3852
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "mese",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "month"
         },
         {
           "name": "mese_num",
           "type": "INTEGER",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "ufficio_pra",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "formalita",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "quantita",
           "type": "DOUBLE",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_autotrend_mensile/*/aci_autotrend_mensile_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_autotrend_mensile__mart_anno_formalita",
         "aci_autotrend_mensile__mart_anno_mese_formalita",
         "aci_autotrend_mensile__mart_anno_provincia_formalita",
         "aci_autotrend_mensile__mart_trend_mensile"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:35:05.781954+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_parco_comune",
       "name": "Aci Parco Comune",
       "description": "Parco veicolare per comune e categoria (stock al 31/12), 2024-2025. Fonte ACI Autoritratto, open data. ATTENZIONE: veicoli registrati al domicilio dell'intestatario, non circolanti nel comune.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2024,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -98,89 +98,82 @@
         "autoritratto"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2024,
+        "end": 2025
+      },
+      "partitions": {
+        "2024": 69389,
+        "2025": 69385
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "regione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "region_code"
         },
         {
           "name": "provincia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "province_code"
         },
         {
           "name": "comune",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_name"
         },
         {
           "name": "codice_istat",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_code"
         },
         {
           "name": "categoria_veicolo",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "veicoli",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "popolazione_residente",
           "type": "INTEGER",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "join_qualita",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_parco_comune/*/aci_parco_comune_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_parco_comune__mart_comune_categoria",
         "aci_parco_comune__mart_auto_per_1000",
         "aci_parco_comune__mart_provincia"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:36:08.594540+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_parco_comune_classe_euro",
       "name": "Aci Parco Comune Classe Euro",
       "description": "Autovetture per comune e classe ambientale Euro (stock al 31/12), 2024-2025. Fonte ACI Autoritratto, open data. ATTENZIONE: veicoli registrati al domicilio dell'intestatario, non circolanti nel comune.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2024,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -191,75 +184,70 @@
         "autoritratto"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2024,
+        "end": 2025
+      },
+      "partitions": {
+        "2024": 89375,
+        "2025": 89798
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "regione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "region_code"
         },
         {
           "name": "provincia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "province_code"
         },
         {
           "name": "comune",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_name"
         },
         {
           "name": "codice_istat",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_code"
         },
         {
           "name": "classe_euro",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "autovetture",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_parco_comune_classe_euro/*/aci_parco_comune_classe_euro_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_parco_comune_classe_euro__mart_comune_euro"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:35:28.542821+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_parco_provincia_eta",
       "name": "Aci Parco Provincia Eta",
       "description": "Autovetture per provincia e classe di anno di immatricolazione (stock al 31/12/2025). Fonte ACI Autoritratto. Misura l'anzianità reale del parco, complementare alle classi Euro. Edizione 2024 esclusa: classi di anzianità diverse, serie non confrontabile.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2025,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -270,61 +258,57 @@
         "anzianita"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2025,
+        "end": 2025
+      },
+      "partitions": {
+        "2025": 856
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "regione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "region_code"
         },
         {
           "name": "provincia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "province_code"
         },
         {
           "name": "classe_eta",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "autovetture",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_parco_provincia_eta/2025/aci_parco_provincia_eta_2025_clean.parquet",
-        "multi_file": false
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_parco_provincia_eta__mart_provincia_eta"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:36:28.504836+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_parco_provincia_soggetto",
       "name": "Aci Parco Provincia Soggetto",
       "description": "Autovetture per provincia distinte tra persona fisica e persona giuridica (stock al 31/12), 2024-2025, con quota aziendale e auto per 1000 abitanti corretta. Fonte ACI Autoritratto.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2024,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -336,74 +320,69 @@
         "famiglie"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2024,
+        "end": 2025
+      },
+      "partitions": {
+        "2024": 107,
+        "2025": 107
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "regione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "region_code"
         },
         {
           "name": "provincia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "province_code"
         },
         {
           "name": "auto_persona_fisica",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "auto_persona_giuridica",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "auto_non_definito",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "auto_totali",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_parco_provincia_soggetto/*/aci_parco_provincia_soggetto_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_parco_provincia_soggetto__mart_provincia_soggetto",
         "aci_parco_provincia_soggetto__mart_auto_per_1000_famiglie"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:36:59.880468+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_parco_regione_alimentazione",
       "name": "Aci Parco Regione Alimentazione",
       "description": "Parco autovetture per regione, alimentazione e classe di cilindrata (stock al 31/12), 2021-2023. Fonte ACI Annuario statistico, open data (ODS). ATTENZIONE: veicoli registrati al domicilio dell'intestatario, non circolanti sul territorio.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2021,
-        "end": 2023
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -416,61 +395,59 @@
         "nuts2"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2021,
+        "end": 2023
+      },
+      "partitions": {
+        "2021": 1334,
+        "2022": 1334,
+        "2023": 1293
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "regione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "region_code"
         },
         {
           "name": "alimentazione",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "classe_cilindrata",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "veicoli",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_parco_regione_alimentazione/*/aci_parco_regione_alimentazione_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_parco_regione_alimentazione__mart_regione_alimentazione",
         "aci_parco_regione_alimentazione__mart_italia_alimentazione"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:37:28.736706+00:00",
+        "year": 2023,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_parco_veicolare",
       "name": "Aci Parco Veicolare",
       "description": "Autoritratto ACI — parco autovetture circolanti per alimentazione (stock al 31/12), 2024-2025. Fonte aci.gov.it open data.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2024,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -481,48 +458,47 @@
         "elettrica"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2024,
+        "end": 2025
+      },
+      "partitions": {
+        "2024": 13,
+        "2025": 14
+      },
       "columns": [
         {
           "name": "anno_riferimento",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "alimentazione",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "veicoli",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_parco_veicolare/*/aci_parco_veicolare_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_parco_veicolare__mart_av_alimentazione",
         "aci_parco_veicolare__mart_quota_alimentazione"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:37:49.094133+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_prime_iscrizioni_autovetture",
       "name": "Aci Prime Iscrizioni Autovetture",
       "description": "Prime iscrizioni di autovetture nuove in Italia per comune e tipo di alimentazione (2017-2025). Fonte ACI via dati.gov.it / lod.aci.it.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2017,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -532,83 +508,84 @@
         "parco-auto"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2017,
+        "end": 2025
+      },
+      "partitions": {
+        "2017": 30037,
+        "2018": 31698,
+        "2019": 35519,
+        "2020": 38393,
+        "2021": 41640,
+        "2022": 39054,
+        "2023": 38682,
+        "2024": 38949,
+        "2025": 37678
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "comune",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_name"
         },
         {
           "name": "provincia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "province_code"
         },
         {
           "name": "codice_istat",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_code"
         },
         {
           "name": "regione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "region_code"
         },
         {
           "name": "popolazione_residente",
           "type": "INTEGER",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "alimentazione",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "prime_iscrizioni",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_prime_iscrizioni_autovetture/*/aci_prime_iscrizioni_autovetture_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_prime_iscrizioni_autovetture__mart_anno_alimentazione",
         "aci_prime_iscrizioni_autovetture__mart_regione_alimentazione",
         "aci_prime_iscrizioni_autovetture__mart_quota_alimentazione"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:39:12.054494+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_radiazioni_classe_euro",
       "name": "Aci Radiazioni Classe Euro",
       "description": "Radiazioni per demolizione di autovetture per comune e classe euro (2017-2025). Fonte ACI via dati.gov.it / lod.aci.it.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2017,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -618,83 +595,84 @@
         "parco-auto"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2017,
+        "end": 2025
+      },
+      "partitions": {
+        "2017": 44052,
+        "2018": 44736,
+        "2019": 44984,
+        "2020": 43598,
+        "2021": 44719,
+        "2022": 42379,
+        "2023": 41873,
+        "2024": 43761,
+        "2025": 43286
+      },
       "columns": [
         {
           "name": "anno",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "comune",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_name"
         },
         {
           "name": "provincia",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "province_code"
         },
         {
           "name": "codice_istat",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "municipality_code"
         },
         {
           "name": "regione",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
           "semantic_type": "region_code"
         },
         {
           "name": "popolazione_residente",
           "type": "INTEGER",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "classe_euro",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "radiazioni",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_radiazioni_classe_euro/*/aci_radiazioni_classe_euro_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_radiazioni_classe_euro__mart_anno_classe_euro",
         "aci_radiazioni_classe_euro__mart_regione_classe_euro",
         "aci_radiazioni_classe_euro__mart_quota_classe_euro"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:40:27.907784+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     },
     {
       "slug": "aci_usato_proprieta",
       "name": "Aci Usato Proprieta",
       "description": "Autoritratto ACI — passaggi di proprietà (mercato usato) per categoria veicolo, con split minivolture, 2024-2025. Fonte aci.gov.it open data.",
-      "source": "",
       "source_id": "aci",
-      "period": {
-        "start": 2024,
-        "end": 2025
-      },
       "tags": [
         "trasporti",
         "aci",
@@ -704,49 +682,51 @@
         "minivolture"
       ],
       "category": "trasporti",
+      "period": {
+        "start": 2024,
+        "end": 2025
+      },
+      "partitions": {
+        "2024": 10,
+        "2025": 10
+      },
       "columns": [
         {
           "name": "anno_riferimento",
           "type": "INTEGER",
           "role": "dimension",
-          "description": "",
           "semantic_type": "year"
         },
         {
           "name": "categoria",
           "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
+          "role": "dimension"
         },
         {
           "name": "minivolture",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "non_minivolture",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         },
         {
           "name": "totale",
           "type": "BIGINT",
-          "role": "metric",
-          "description": ""
+          "role": "metric"
         }
       ],
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-clean/open-aci/aci_usato_proprieta/*/aci_usato_proprieta_*_clean.parquet",
-        "multi_file": true
-      },
-      "stage": "incubating",
       "mart_refs": [
         "aci_usato_proprieta__mart_usato_categoria",
         "aci_usato_proprieta__mart_usato_sintesi"
-      ]
+      ],
+      "last_run": {
+        "at": "2026-11-24T23:40:39.357679+00:00",
+        "year": 2025,
+        "status": "SUCCESS"
+      }
     }
   ],
   "marts": [
@@ -754,756 +734,252 @@
       "slug": "aci_autotrend_mensile__mart_anno_formalita",
       "dataset": "aci_autotrend_mensile",
       "table": "mart_anno_formalita",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_autotrend_mensile/mart_anno_formalita.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "formalita"
+      ]
     },
     {
       "slug": "aci_autotrend_mensile__mart_anno_mese_formalita",
       "dataset": "aci_autotrend_mensile",
       "table": "mart_anno_mese_formalita",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_autotrend_mensile/mart_anno_mese_formalita.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "mese",
+        "formalita"
+      ]
     },
     {
       "slug": "aci_autotrend_mensile__mart_anno_provincia_formalita",
       "dataset": "aci_autotrend_mensile",
       "table": "mart_anno_provincia_formalita",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_autotrend_mensile/mart_anno_provincia_formalita.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "ufficio_pra",
+        "formalita"
+      ]
     },
     {
       "slug": "aci_autotrend_mensile__mart_trend_mensile",
       "dataset": "aci_autotrend_mensile",
       "table": "mart_trend_mensile",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_autotrend_mensile/mart_trend_mensile.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "mese_num",
+        "formalita"
+      ]
     },
     {
       "slug": "aci_parco_comune__mart_auto_per_1000",
       "dataset": "aci_parco_comune",
       "table": "mart_auto_per_1000",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_comune/*/mart_auto_per_1000.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "regione",
+        "provincia",
+        "comune"
+      ]
     },
     {
       "slug": "aci_parco_comune__mart_comune_categoria",
       "dataset": "aci_parco_comune",
       "table": "mart_comune_categoria",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_comune/*/mart_comune_categoria.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "regione",
+        "provincia",
+        "comune",
+        "categoria_veicolo"
+      ]
     },
     {
       "slug": "aci_parco_comune__mart_provincia",
       "dataset": "aci_parco_comune",
       "table": "mart_provincia",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_comune/*/mart_provincia.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "regione",
+        "provincia"
+      ]
     },
     {
       "slug": "aci_parco_comune_classe_euro__mart_comune_euro",
       "dataset": "aci_parco_comune_classe_euro",
       "table": "mart_comune_euro",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_comune_classe_euro/*/mart_comune_euro.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "regione",
+        "provincia",
+        "comune",
+        "classe_euro"
+      ]
     },
     {
       "slug": "aci_parco_provincia_eta__mart_provincia_eta",
       "dataset": "aci_parco_provincia_eta",
       "table": "mart_provincia_eta",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_provincia_eta/2025/mart_provincia_eta.parquet",
-        "multi_file": false
-      }
+      "layout": "year",
+      "year": 2025,
+      "primary_key": [
+        "anno",
+        "regione",
+        "provincia",
+        "classe_eta"
+      ]
     },
     {
       "slug": "aci_parco_provincia_soggetto__mart_auto_per_1000_famiglie",
       "dataset": "aci_parco_provincia_soggetto",
       "table": "mart_auto_per_1000_famiglie",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_provincia_soggetto/*/mart_auto_per_1000_famiglie.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "regione",
+        "provincia"
+      ]
     },
     {
       "slug": "aci_parco_provincia_soggetto__mart_provincia_soggetto",
       "dataset": "aci_parco_provincia_soggetto",
       "table": "mart_provincia_soggetto",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_provincia_soggetto/*/mart_provincia_soggetto.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "regione",
+        "provincia"
+      ]
     },
     {
       "slug": "aci_parco_regione_alimentazione__mart_italia_alimentazione",
       "dataset": "aci_parco_regione_alimentazione",
       "table": "mart_italia_alimentazione",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_regione_alimentazione/*/mart_italia_alimentazione.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "alimentazione"
+      ]
     },
     {
       "slug": "aci_parco_regione_alimentazione__mart_regione_alimentazione",
       "dataset": "aci_parco_regione_alimentazione",
       "table": "mart_regione_alimentazione",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_regione_alimentazione/*/mart_regione_alimentazione.parquet",
-        "multi_file": true
-      }
+      "layout": "glob",
+      "primary_key": [
+        "anno",
+        "regione",
+        "alimentazione"
+      ]
     },
     {
       "slug": "aci_parco_veicolare__mart_av_alimentazione",
       "dataset": "aci_parco_veicolare",
       "table": "mart_av_alimentazione",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_veicolare/mart_av_alimentazione.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno_riferimento",
+        "alimentazione"
+      ]
     },
     {
       "slug": "aci_parco_veicolare__mart_quota_alimentazione",
       "dataset": "aci_parco_veicolare",
       "table": "mart_quota_alimentazione",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_parco_veicolare/mart_quota_alimentazione.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno_riferimento",
+        "alimentazione"
+      ]
     },
     {
       "slug": "aci_prime_iscrizioni_autovetture__mart_anno_alimentazione",
       "dataset": "aci_prime_iscrizioni_autovetture",
       "table": "mart_anno_alimentazione",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_prime_iscrizioni_autovetture/mart_anno_alimentazione.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "alimentazione"
+      ]
     },
     {
       "slug": "aci_prime_iscrizioni_autovetture__mart_quota_alimentazione",
       "dataset": "aci_prime_iscrizioni_autovetture",
       "table": "mart_quota_alimentazione",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_prime_iscrizioni_autovetture/mart_quota_alimentazione.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "alimentazione"
+      ]
     },
     {
       "slug": "aci_prime_iscrizioni_autovetture__mart_regione_alimentazione",
       "dataset": "aci_prime_iscrizioni_autovetture",
       "table": "mart_regione_alimentazione",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_prime_iscrizioni_autovetture/mart_regione_alimentazione.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "regione",
+        "alimentazione"
+      ]
     },
     {
       "slug": "aci_radiazioni_classe_euro__mart_anno_classe_euro",
       "dataset": "aci_radiazioni_classe_euro",
       "table": "mart_anno_classe_euro",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_radiazioni_classe_euro/mart_anno_classe_euro.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "classe_euro"
+      ]
     },
     {
       "slug": "aci_radiazioni_classe_euro__mart_quota_classe_euro",
       "dataset": "aci_radiazioni_classe_euro",
       "table": "mart_quota_classe_euro",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_radiazioni_classe_euro/mart_quota_classe_euro.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "classe_euro"
+      ]
     },
     {
       "slug": "aci_radiazioni_classe_euro__mart_regione_classe_euro",
       "dataset": "aci_radiazioni_classe_euro",
       "table": "mart_regione_classe_euro",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_radiazioni_classe_euro/mart_regione_classe_euro.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno",
+        "regione",
+        "classe_euro"
+      ]
     },
     {
       "slug": "aci_usato_proprieta__mart_usato_categoria",
       "dataset": "aci_usato_proprieta",
       "table": "mart_usato_categoria",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_usato_proprieta/mart_usato_categoria.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno_riferimento",
+        "categoria"
+      ]
     },
     {
       "slug": "aci_usato_proprieta__mart_usato_sintesi",
       "dataset": "aci_usato_proprieta",
       "table": "mart_usato_sintesi",
-      "location": {
-        "type": "gcs",
-        "path": "gs://dataciviclab-mart/open-aci/aci_usato_proprieta/mart_usato_sintesi.parquet",
-        "multi_file": false
-      }
+      "layout": "flat",
+      "primary_key": [
+        "anno_riferimento"
+      ]
     }
   ],
-  "signals": [
-    {
-      "id": "aci_autotrend_mensile",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_autotrend_mensile",
-      "detail": "anni 2019-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183041Z_853ce7bc",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100
-        },
-        "output_rows": {
-          "clean": 3852
-        },
-        "output_bytes": {
-          "raw": 225216,
-          "clean": 13450
-        },
-        "started_at": "2026-11-01T18:30:41.713305+00:00",
-        "finished_at": "2026-11-01T18:30:43.022977+00:00",
-        "duration_seconds": 1.31
-      }
-    },
-    {
-      "id": "aci_parco_comune",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_parco_comune",
-      "detail": "anni 2024-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183130Z_792f9556",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 95,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 69385,
-          "mart": 77117
-        },
-        "output_bytes": {
-          "raw": 8380097,
-          "clean": 495342,
-          "mart": 586189
-        },
-        "started_at": "2026-11-01T18:31:30.533688+00:00",
-        "finished_at": "2026-11-01T18:31:43.775390+00:00",
-        "duration_seconds": 13.242
-      }
-    },
-    {
-      "id": "aci_parco_comune_classe_euro",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_parco_comune_classe_euro",
-      "detail": "anni 2024-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183100Z_88dee47d",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 95,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 89798,
-          "mart": 89798
-        },
-        "output_bytes": {
-          "raw": 8380097,
-          "clean": 459020,
-          "mart": 498323
-        },
-        "started_at": "2026-11-01T18:31:00.437612+00:00",
-        "finished_at": "2026-11-01T18:31:16.029753+00:00",
-        "duration_seconds": 15.592
-      }
-    },
-    {
-      "id": "aci_parco_provincia_eta",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_parco_provincia_eta",
-      "detail": "anno 2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183144Z_ff6f62fd",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 95,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 856,
-          "mart": 856
-        },
-        "output_bytes": {
-          "raw": 8380097,
-          "clean": 4646,
-          "mart": 10269
-        },
-        "started_at": "2026-11-01T18:31:44.771987+00:00",
-        "finished_at": "2026-11-01T18:31:53.574316+00:00",
-        "duration_seconds": 8.802
-      }
-    },
-    {
-      "id": "aci_parco_provincia_soggetto",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_parco_provincia_soggetto",
-      "detail": "anni 2024-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183204Z_8a833e2e",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 107,
-          "mart": 214
-        },
-        "output_bytes": {
-          "raw": 8380097,
-          "clean": 3415,
-          "mart": 8564
-        },
-        "started_at": "2026-11-01T18:32:04.831431+00:00",
-        "finished_at": "2026-11-01T18:32:14.776782+00:00",
-        "duration_seconds": 9.945
-      }
-    },
-    {
-      "id": "aci_parco_regione_alimentazione",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_parco_regione_alimentazione",
-      "detail": "anni 2021-2023 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183225Z_6f23c0d9",
-        "year": 2023,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 95,
-          "mart": 100
-        },
-        "output_rows": {
-          "clean": 1293,
-          "mart": 210
-        },
-        "output_bytes": {
-          "raw": 1577147,
-          "clean": 4889,
-          "mart": 4083
-        },
-        "started_at": "2026-11-01T18:32:25.771933+00:00",
-        "finished_at": "2026-11-01T18:32:29.708074+00:00",
-        "duration_seconds": 3.936
-      }
-    },
-    {
-      "id": "aci_parco_veicolare",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_parco_veicolare",
-      "detail": "anni 2024-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183238Z_c6bbf45e",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 95
-        },
-        "output_rows": {
-          "clean": 14
-        },
-        "output_bytes": {
-          "raw": 8380097,
-          "clean": 788
-        },
-        "started_at": "2026-11-01T18:32:38.956929+00:00",
-        "finished_at": "2026-11-01T18:32:47.045963+00:00",
-        "duration_seconds": 8.089
-      }
-    },
-    {
-      "id": "aci_prime_iscrizioni_autovetture",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_prime_iscrizioni_autovetture",
-      "detail": "anni 2017-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183334Z_7e6c4242",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100
-        },
-        "output_rows": {
-          "raw": 38464,
-          "clean": 37678
-        },
-        "output_bytes": {
-          "raw": 1820369,
-          "clean": 267169
-        },
-        "started_at": "2026-11-01T18:33:34.221106+00:00",
-        "finished_at": "2026-11-01T18:33:37.580790+00:00",
-        "duration_seconds": 3.36
-      }
-    },
-    {
-      "id": "aci_radiazioni_classe_euro",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_radiazioni_classe_euro",
-      "detail": "anni 2017-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183424Z_3f9ad629",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100
-        },
-        "output_rows": {
-          "raw": 44312,
-          "clean": 43286
-        },
-        "output_bytes": {
-          "raw": 1718003,
-          "clean": 334493
-        },
-        "started_at": "2026-11-01T18:34:24.437956+00:00",
-        "finished_at": "2026-11-01T18:34:27.637410+00:00",
-        "duration_seconds": 3.199
-      }
-    },
-    {
-      "id": "aci_usato_proprieta",
-      "source_id": "aci",
-      "status": "ok",
-      "label": "aci_usato_proprieta",
-      "detail": "anni 2024-2025 — mart: si",
-      "action": "",
-      "run": {
-        "run_id": "20261101T183432Z_c4314469",
-        "year": 2025,
-        "status": "SUCCESS",
-        "quality_score": {
-          "raw": 100,
-          "clean": 100
-        },
-        "output_rows": {
-          "clean": 10
-        },
-        "output_bytes": {
-          "raw": 970526,
-          "clean": 1204
-        },
-        "started_at": "2026-11-01T18:34:32.354398+00:00",
-        "finished_at": "2026-11-01T18:34:34.340952+00:00",
-        "duration_seconds": 1.987
-      }
-    }
-  ],
-  "codelists": [],
-  "entities": {
-    "entities": {
-      "Comune": {
-        "entity": "Comune",
-        "label": "Comune (ISTAT)",
-        "datasets": [
-          {
-            "slug": "aci_parco_comune",
-            "name": "Aci Parco Comune",
-            "column": "comune",
-            "semantic_type": "municipality_name"
-          },
-          {
-            "slug": "aci_parco_comune",
-            "name": "Aci Parco Comune",
-            "column": "codice_istat",
-            "semantic_type": "municipality_code"
-          },
-          {
-            "slug": "aci_parco_comune_classe_euro",
-            "name": "Aci Parco Comune Classe Euro",
-            "column": "comune",
-            "semantic_type": "municipality_name"
-          },
-          {
-            "slug": "aci_parco_comune_classe_euro",
-            "name": "Aci Parco Comune Classe Euro",
-            "column": "codice_istat",
-            "semantic_type": "municipality_code"
-          },
-          {
-            "slug": "aci_prime_iscrizioni_autovetture",
-            "name": "Aci Prime Iscrizioni Autovetture",
-            "column": "comune",
-            "semantic_type": "municipality_name"
-          },
-          {
-            "slug": "aci_prime_iscrizioni_autovetture",
-            "name": "Aci Prime Iscrizioni Autovetture",
-            "column": "codice_istat",
-            "semantic_type": "municipality_code"
-          },
-          {
-            "slug": "aci_radiazioni_classe_euro",
-            "name": "Aci Radiazioni Classe Euro",
-            "column": "comune",
-            "semantic_type": "municipality_name"
-          },
-          {
-            "slug": "aci_radiazioni_classe_euro",
-            "name": "Aci Radiazioni Classe Euro",
-            "column": "codice_istat",
-            "semantic_type": "municipality_code"
-          }
-        ],
-        "types": {
-          "municipality_name": 4,
-          "municipality_code": 4
-        }
-      },
-      "Provincia": {
-        "entity": "Provincia",
-        "label": "Provincia",
-        "datasets": [
-          {
-            "slug": "aci_parco_comune",
-            "name": "Aci Parco Comune",
-            "column": "provincia",
-            "semantic_type": "province_code"
-          },
-          {
-            "slug": "aci_parco_comune_classe_euro",
-            "name": "Aci Parco Comune Classe Euro",
-            "column": "provincia",
-            "semantic_type": "province_code"
-          },
-          {
-            "slug": "aci_parco_provincia_eta",
-            "name": "Aci Parco Provincia Eta",
-            "column": "provincia",
-            "semantic_type": "province_code"
-          },
-          {
-            "slug": "aci_parco_provincia_soggetto",
-            "name": "Aci Parco Provincia Soggetto",
-            "column": "provincia",
-            "semantic_type": "province_code"
-          },
-          {
-            "slug": "aci_prime_iscrizioni_autovetture",
-            "name": "Aci Prime Iscrizioni Autovetture",
-            "column": "provincia",
-            "semantic_type": "province_code"
-          },
-          {
-            "slug": "aci_radiazioni_classe_euro",
-            "name": "Aci Radiazioni Classe Euro",
-            "column": "provincia",
-            "semantic_type": "province_code"
-          }
-        ],
-        "types": {
-          "province_code": 6
-        }
-      },
-      "Regione": {
-        "entity": "Regione",
-        "label": "Regione",
-        "datasets": [
-          {
-            "slug": "aci_parco_comune",
-            "name": "Aci Parco Comune",
-            "column": "regione",
-            "semantic_type": "region_code"
-          },
-          {
-            "slug": "aci_parco_comune_classe_euro",
-            "name": "Aci Parco Comune Classe Euro",
-            "column": "regione",
-            "semantic_type": "region_code"
-          },
-          {
-            "slug": "aci_parco_provincia_eta",
-            "name": "Aci Parco Provincia Eta",
-            "column": "regione",
-            "semantic_type": "region_code"
-          },
-          {
-            "slug": "aci_parco_provincia_soggetto",
-            "name": "Aci Parco Provincia Soggetto",
-            "column": "regione",
-            "semantic_type": "region_code"
-          },
-          {
-            "slug": "aci_parco_regione_alimentazione",
-            "name": "Aci Parco Regione Alimentazione",
-            "column": "regione",
-            "semantic_type": "region_code"
-          },
-          {
-            "slug": "aci_prime_iscrizioni_autovetture",
-            "name": "Aci Prime Iscrizioni Autovetture",
-            "column": "regione",
-            "semantic_type": "region_code"
-          },
-          {
-            "slug": "aci_radiazioni_classe_euro",
-            "name": "Aci Radiazioni Classe Euro",
-            "column": "regione",
-            "semantic_type": "region_code"
-          }
-        ],
-        "types": {
-          "region_code": 7
-        }
-      },
-      "Tempo": {
-        "entity": "Tempo",
-        "label": "Tempo / data",
-        "datasets": [
-          {
-            "slug": "aci_autotrend_mensile",
-            "name": "Aci Autotrend Mensile",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_autotrend_mensile",
-            "name": "Aci Autotrend Mensile",
-            "column": "mese",
-            "semantic_type": "month"
-          },
-          {
-            "slug": "aci_parco_comune",
-            "name": "Aci Parco Comune",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_parco_comune_classe_euro",
-            "name": "Aci Parco Comune Classe Euro",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_parco_provincia_eta",
-            "name": "Aci Parco Provincia Eta",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_parco_provincia_soggetto",
-            "name": "Aci Parco Provincia Soggetto",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_parco_regione_alimentazione",
-            "name": "Aci Parco Regione Alimentazione",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_parco_veicolare",
-            "name": "Aci Parco Veicolare",
-            "column": "anno_riferimento",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_prime_iscrizioni_autovetture",
-            "name": "Aci Prime Iscrizioni Autovetture",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_radiazioni_classe_euro",
-            "name": "Aci Radiazioni Classe Euro",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "aci_usato_proprieta",
-            "name": "Aci Usato Proprieta",
-            "column": "anno_riferimento",
-            "semantic_type": "year"
-          }
-        ],
-        "types": {
-          "year": 10,
-          "month": 1
-        }
-      }
-    },
-    "bridges": []
-  }
+  "checks": [],
+  "codelists": []
 }
